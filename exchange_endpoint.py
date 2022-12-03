@@ -44,7 +44,8 @@ def check_sig(payload,sig):
     platform = payload['platform'] # payload - platform
         
     # dump payload message
-    payload = json.dumps(content['payload'])
+    payload = json.dumps(payload)
+    # payload = json.dumps(content['payload'])
 
     # Case 1: sig for Ethereum
     if platform == 'Ethereum':
@@ -192,7 +193,7 @@ def trade():
         res = check_sig(content['payload'], content['sig'])
         if res == False:
             log_message(content)
-            return jsonify(False)
+            return jsonify( False )
         
         # TODO: Add the order to the database
         payload = content['payload']
@@ -214,17 +215,17 @@ def trade():
         
         # TODO: Be sure to return jsonify(True) or jsonify(False) depending on if the method was successful
         if res == True:
-            return jsonify(True)
+            return jsonify( True )
         
 
 @app.route('/order_book')
 def order_book():
     #Your code here
     #Note that you can access the database session using g.session
-    res = {'data': []}
+    result = {'data': []}
     for this in g.session.query(Order).all():
-        res['data'].append({'sender_pk': this.sender_pk, 'receiver_pk': this.receiver_pk, 'buy_currency': this.buy_currency, 'sell_currency': this.sell_currency, 'buy_amount': this.buy_amount, 'sell_amount': this.sell_amount, 'signature': this.signature})
-    return jsonify(res)
+        result['data'].append({'sender_pk': this.sender_pk, 'receiver_pk': this.receiver_pk, 'buy_currency': this.buy_currency, 'sell_currency': this.sell_currency, 'buy_amount': this.buy_amount, 'sell_amount': this.sell_amount, 'signature': this.signature})
+    return jsonify(result)
     # return jsonify(result)
 
 if __name__ == '__main__':
