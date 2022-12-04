@@ -85,7 +85,7 @@ def fill_order(order,txes=[]):
     # session.commit # commit the datebase
 
     # Check if there are any existing orders that match the new order. FIFO is applied here.
-    existing_order = g.session.query(Order).filter(Order.filled == None, Order.buy_currency == new_order.sell_currency, Order.sell_currency == new_order.buy_currency, ((Order.sell_amount / Order.buy_amount ) >= (new_order.buy_amount / new_order.sell_amount))).first()
+    existing_order = g.session.query(Order).filter(Order.filled == None, Order.buy_currency == order.sell_currency, Order.sell_currency == order.buy_currency, ((Order.sell_amount / Order.buy_amount ) >= (order.buy_amount / order.sell_amount))).first()
 
     # Match orders, if the existing match is found.
     if existing_order != None:
