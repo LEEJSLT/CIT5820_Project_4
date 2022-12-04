@@ -28,7 +28,6 @@ def shutdown_session(response_or_exc):
     g.session.commit()
     g.session.remove()
 
-
 """ Suggested helper methods """
 
 def check_sig(payload,sig):
@@ -80,8 +79,8 @@ def fill_order(order,txes=[]):
     # receiver_pk = order['receiver_pk'] # order’s originator controlled key
 
     # # Generate new order.
-    # new_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_currency, sell_currency=sell_currency, buy_amount=buy_amount, sell_amount=sell_amount)
-    # session.add(new_order) # add new order into datebase
+    # order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_currency, sell_currency=sell_currency, buy_amount=buy_amount, sell_amount=sell_amount)
+    # session.add(order) # add new order into datebase
     # session.commit # commit the datebase
 
     # Check if there are any existing orders that match the new order. FIFO is applied here.
@@ -102,7 +101,7 @@ def fill_order(order,txes=[]):
 
         if existing_order.sell_amount < order.buy_amount or order.buy_amount < existing_order.sell_amount:
             
-            # new_order is the parent for the create_order
+            # order is the parent for the create_order
             if existing_order.sell_amount < order.buy_amount:
                 
                 # id from parent order
@@ -139,7 +138,6 @@ def fill_order(order,txes=[]):
                 exchange_rate = existing_order.sell_amount / existing_order.buy_amount
                 buy_amount = sell_amount / exchange_rate
                 
-
             # Create a new order for remaining balance
             create_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_currency, sell_currency=sell_currency, buy_amount=buy_amount, sell_amount=sell_amount, creator_id = creator_id)
 
@@ -149,7 +147,7 @@ def fill_order(order,txes=[]):
                 
         else:
             g.session.commit()
-    # pass
+    #pass
   
 def log_message(d):
     # Takes input dictionary d and writes it to the Log table
@@ -160,8 +158,6 @@ def log_message(d):
     #pass
 
 """ End of helper methods """
-
-
 
 @app.route('/trade', methods=['POST'])
 def trade():
@@ -209,7 +205,6 @@ def trade():
         g.session.add(current_order)
         g.session.commit()
     
-        
         # TODO: Fill the order
         fill_order(current_order)
         
@@ -228,5 +223,5 @@ def order_book():
     return result
     # return jsonify(result)
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
     app.run(port='5002')
